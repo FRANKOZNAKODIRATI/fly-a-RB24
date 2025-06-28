@@ -243,9 +243,38 @@
   const maxHearts = 3;
   const heartImgSrc = "https://i.imgur.com/9OkewJh.png";
 
+  // LocalStorage key
+  const STORAGE_KEY = 'rb24skyGambleGameState';
+
   const engineSound = document.getElementById("engineSound");
   engineSound.volume = 0.5;
   engineSound.muted = false;
+
+  function saveGameState() {
+    const gameState = {
+      coins: coins,
+      hearts: hearts
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(gameState));
+  }
+
+  function loadGameState() {
+    const savedState = localStorage.getItem(STORAGE_KEY);
+    if (savedState) {
+      try {
+        const gameState = JSON.parse(savedState);
+        if (typeof gameState.coins === 'number' && typeof gameState.hearts === 'number') {
+          coins = gameState.coins;
+          hearts = gameState.hearts;
+          updateHearts();
+          return true;
+        }
+      } catch (e) {
+        console.warn('Failed to parse saved game state:', e);
+      }
+    }
+    return false;
+  }
 
   function updateHearts() {
     const heartElem = document.getElementById("hearts");
@@ -277,19 +306,26 @@
   function startGame() {
     bet = parseFloat(document.getElementById("betAmount").value);
     if (isNaN(bet) || bet <= 0) return;
-    coins = bet;
+
+    // Load saved state if coins >= bet, else reset
+    if (!loadGameState() || coins < bet) {
+      coins = bet;
+      hearts = maxHearts;
+    }
+
     multiplierIcons = [];
     flybyObjects = [];
     car.y = canvas.height / 2;
     car.vy = 0;
     flying = true;
     gameOver = false;
-    hearts = maxHearts;
     updateHearts();
     document.getElementById("cashoutBtn").style.display = "inline-block";
     playEngineSound();
     document.getElementById("loseScreen").style.display = "none";
     document.getElementById("continueBtn").style.display = "none";
+
+    saveGameState();
   }
 
   function endGame() {
@@ -300,6 +336,8 @@
     engineSound.currentTime = 0;
     document.getElementById("loseScreen").style.display = "flex";
     document.getElementById("continueBtn").style.display = "inline-block";
+
+    saveGameState();
   }
 
   function cashOut() {
@@ -308,6 +346,8 @@
     document.getElementById("cashoutBtn").style.display = "none";
     engineSound.pause();
     engineSound.currentTime = 0;
+
+    saveGameState();
   }
 
   function spawnMultiplier() {
@@ -396,6 +436,8 @@
 
     if (Math.random() < 0.02) spawnMultiplier();
     if (Math.random() < 0.01) spawnFlyby();
+
+    saveGameState();
   }
 
   function draw() {
