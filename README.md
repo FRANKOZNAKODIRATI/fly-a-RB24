@@ -1,0 +1,37 @@
+# RB24 Sky Gamble
+
+RB24 Sky Gamble is an exciting arcade-style web game where you pilot a sleek car soaring through a dynamic sky environment. Collect multipliers to increase your coins, avoid hitting the top or bottom edges to keep your hearts, and cash out at the perfect moment to maximize your winnings!
+
+## Features
+
+- Start with 3 hearts; lose one each time you hit the top or bottom.
+- Collect multiplier icons to boost your coins.
+- Dynamic flyby objects add visual interest.
+- Responsive and sleek UI for desktop and mobile.
+- Simple controls: Use arrow keys or W/S to move the car up and down.
+- Bet your coins and cash out strategically.
+
+## How to Play
+
+1. Enter your bet amount and press **Start**.
+2. Use **Up/Down arrow keys** or **W/S keys** to control the car’s vertical movement.
+3. Avoid hitting the top or bottom edges — each hit costs a heart.
+4. Collect multiplier icons to multiply your coins.
+5. Press **Cash Out** to collect your winnings before losing all hearts.
+6. If you lose all hearts, the game ends and you win. Press **Continue** to restart.
+
+## Installation
+
+No installation needed! Just open `index.html` in a modern web browser with internet access.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Credits
+
+- Developed by Franko Pačarić
+
+---
+
+Enjoy flying high and good luck with your bets!
