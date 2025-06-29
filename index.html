@@ -106,7 +106,7 @@
       display: none;
       width: 100%;
     }
-    #loseScreen {
+    #loseScreen, #winScreen {
       position: absolute;
       top: 0; left: 0;
       width: 100vw; height: 100vh;
@@ -121,14 +121,25 @@
       font-size: 48px;
       user-select: none;
     }
-    #loseScreen img {
+    #loseScreen { display: none; }
+    #winScreen { display: none; color: #36d636; }
+    #loseScreen img, #winScreen img {
       max-width: 300px;
       width: 60vw;
       margin-bottom: 20px;
       border-radius: 14px;
       box-shadow: 0 0 20px #ff4c4caa;
     }
-    #continueBtn {
+    #winScreen img {
+      box-shadow: 0 0 20px #36d63688;
+    }
+    #loseScreen h1, #winScreen h1, #winScreen div {
+      margin-top: 0;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 8px #000c;
+    }
+    #winScreen h1 { color: #36d636; }
+    #continueBtn, #winContinueBtn {
       margin-top: 20px;
       font-size: 20px;
       padding: 12px 28px;
@@ -140,11 +151,21 @@
       box-shadow: 0 6px 18px rgba(255,76,76,0.8);
       transition: background-color 0.3s ease;
     }
+    #winContinueBtn {
+      background-color: #36d636;
+      box-shadow: 0 6px 18px rgba(54,214,54,0.8);
+    }
     #continueBtn:hover {
       background-color: #ff1f1f;
     }
     #continueBtn:active {
       background-color: #cc1616;
+    }
+    #winContinueBtn:hover {
+      background-color: #28a728;
+    }
+    #winContinueBtn:active {
+      background-color: #1f7f1f;
     }
     @media (max-width: 480px) {
       #ui {
@@ -180,10 +201,15 @@
     </div>
     <button id="cashoutBtn" onclick="cashOut()">Cash Out</button>
   </div>
-  <div id="loseScreen" style="display:none;">
+  <div id="loseScreen">
     <img src="https://i.imgur.com/IOiADe0.jpeg" alt="You Lose" />
-    <div>YOU LOSE</div>
+    <h1>YOU LOSE</h1>
     <button id="continueBtn">Continue</button>
+  </div>
+  <div id="winScreen">
+    <img src="https://i.guim.co.uk/img/media/168a353022e4cf9924539915e0dd3b30be84a202/0_163_2901_1740/master/2901.jpg?width=465&dpr=1&s=none&crop=none" alt="You Win" />
+    <h1>YOU WIN</h1>
+    <button id="winContinueBtn">Continue</button>
   </div>
   <canvas id="gameCanvas"></canvas>
   <audio id="engineSound" loop>
@@ -265,6 +291,8 @@
       document.getElementById("engineSound").play();
       document.getElementById("loseScreen").style.display = "none";
       document.getElementById("continueBtn").style.display = "none";
+      document.getElementById("winScreen").style.display = "none";
+      document.getElementById("winContinueBtn").style.display = "none";
     }
 
     function endGame() {
@@ -279,10 +307,12 @@
 
     function cashOut() {
       flying = false;
-      alert(`You cashed out: ${coins.toFixed(2)} coins!`);
       document.getElementById("cashoutBtn").style.display = "none";
       document.getElementById("engineSound").pause();
       document.getElementById("engineSound").currentTime = 0;
+      // Show winning screen
+      document.getElementById("winScreen").style.display = "flex";
+      document.getElementById("winContinueBtn").style.display = "inline-block";
     }
 
     function spawnMultiplier() {
@@ -416,6 +446,12 @@
     document.getElementById("continueBtn").addEventListener("click", () => {
       document.getElementById("loseScreen").style.display = "none";
       document.getElementById("continueBtn").style.display = "none";
+      startGame();
+    });
+
+    document.getElementById("winContinueBtn").addEventListener("click", () => {
+      document.getElementById("winScreen").style.display = "none";
+      document.getElementById("winContinueBtn").style.display = "none";
       startGame();
     });
 
